@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using PersonalAccount.Models.Students;
 using PersonalAccount.Repository;
 
@@ -15,5 +18,23 @@ namespace PersonalAccount.Services.Auth
             if (result == PasswordVerificationResult.Failed) return null;
             return student.Clone() as StudentModel;
         }
+
+        public async Task SignInAsync(HttpContext ctx, StudentModel student)
+        {
+            var claims = new List<Claim>
+            {
+                new(ClaimTypes.NameIdentifier, student.Id.ToString()),
+                new(ClaimTypes.Name, student.FullName),
+                new(ClaimTypes.Email, student.Email),
+            };
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+        
+            await ctx.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+        }
+
+        public async Task SignOutAsync(HttpContext ctx) => await ctx.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
     }
+    
+    
 }

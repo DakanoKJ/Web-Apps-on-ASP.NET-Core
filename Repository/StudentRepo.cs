@@ -18,7 +18,7 @@ public class StudentRepo<T>(AppDbContext context,  IMapper<StudentEntity, T> map
         return mapper.ToModel(entity);
     }
 
-    public async Task<T?> GetById(int id)
+    public async Task<T?> GetByIdAsync(int id)
     {
         var entity = await Students.FindAsync(id);
         return mapper.ToModel(entity);

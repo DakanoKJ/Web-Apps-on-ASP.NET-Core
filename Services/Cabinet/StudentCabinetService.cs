@@ -5,5 +5,5 @@ namespace PersonalAccount.Services.Cabinet;
 
 public class StudentCabinetService(IStudentRepo<StudentModel> students) : IStudentCabinetService
 {
-    public Task<StudentModel?> GetStudentByIdAsync(int id) => students.GetById(id);
+    public Task<StudentModel?> GetStudentByIdAsync(int id) => students.GetByIdAsync(id);
 }

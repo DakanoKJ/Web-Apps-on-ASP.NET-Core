@@ -1,7 +1,4 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PersonalAccount.Models;
 using PersonalAccount.Services.Auth;
@@ -32,17 +29,7 @@ public class AccountController(IStudentAuthService auth) : Controller
             return View(login);
         }
 
-        var claims = new List<Claim>
-        {
-            new(ClaimTypes.NameIdentifier, student.Id.ToString()),
-            new(ClaimTypes.Name, student.FullName),
-            new(ClaimTypes.Email, student.Email),
-        };
-        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        var principal = new ClaimsPrincipal(identity);
-        
-        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-        
+        await auth.SignInAsync(HttpContext, student);
         return Redirect(login.ReturnUrl ?? "/");
     }
 
@@ -51,7 +38,7 @@ public class AccountController(IStudentAuthService auth) : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
     {
-        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        await auth.SignOutAsync(HttpContext);
         return RedirectToAction("Index", "Home");
     }
 }

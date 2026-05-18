@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PersonalAccount.Data;
 using PersonalAccount.Data.Entities;
+using PersonalAccount.Models;
 using PersonalAccount.Models.Students;
 using PersonalAccount.Repository;
 using PersonalAccount.Repository.Mappers;
@@ -33,12 +34,17 @@ namespace PersonalAccount
 
             builder.Services.AddScoped<IStudentAuthService, StudentAuthService>();
             builder.Services.AddScoped<IStudentCabinetService, StudentCabinetService>();
-            builder.Services.AddScoped<IPasswordHasher<StudentAuthModel>, PasswordHasher<StudentAuthModel>>();
+            builder.Services.AddScoped<IConfirmationTokenService, ConfirmationTokenTokenService>();
+            
             builder.Services.AddScoped<IStudentRepo<StudentAuthModel>, StudentRepo<StudentAuthModel>>();
             builder.Services.AddScoped<IStudentRepo<StudentModel>, StudentRepo<StudentModel>>();
+            builder.Services.AddScoped<IConfirmationTokenRepo, ConfirmationTokenRepo>();
+            
             builder.Services.AddScoped<IMapper<StudentEntity, StudentAuthModel>, StudentAuthMapper>();
             builder.Services.AddScoped<IMapper<StudentEntity, StudentModel>, StudentMapper>();
+            builder.Services.AddScoped<IMapper<ConfirmationTokenEntity, ConfirmationTokenModel>, ConfirmationTokenMapper>();
 
+            builder.Services.AddScoped<IPasswordHasher<StudentAuthModel>, PasswordHasher<StudentAuthModel>>();
             if (builder.Environment.IsDevelopment())
                 builder.Services.AddScoped<DbSeeder>();
 
