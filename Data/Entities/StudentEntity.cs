@@ -10,4 +10,5 @@ public class StudentEntity
     public string Email { get; set; } = string.Empty;
     public string? PhotoUrl { get; set; }
     public string PasswordHash { get; set; } = string.Empty;
+    public List<ConfirmationTokenEntity> ConfirmationTokens { get; set; } = [];
 }
