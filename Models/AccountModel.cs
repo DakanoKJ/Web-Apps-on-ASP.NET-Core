@@ -2,7 +2,7 @@
 
 namespace PersonalAccount.Models;
 
-public class AccountAuthModel
+public class AccountModel
 {
     public int Id { get; set; }
     public string Email { get; set; } = string.Empty;

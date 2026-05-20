@@ -5,23 +5,21 @@ namespace PersonalAccount.Repository.Mappers;
 
 public class ConfirmationTokenMapper : IMapper<ConfirmationTokenEntity, ConfirmationTokenModel>
 {
-    public ConfirmationTokenEntity? ToEntity(ConfirmationTokenModel? model) => model == null
-        ? null
-        : new ConfirmationTokenEntity
+    public ConfirmationTokenEntity ToEntity(ConfirmationTokenModel model) =>
+        new()
         {
             Id = model.Id,
-            StudentId = model.StudentId,
+            AccountId = model.AccountId,
             TokenHash = model.TokenHash,
             ConfirmedAt = model.ConfirmedAt,
             ExpiresAt = model.ExpiresAt,
         };
 
-    public ConfirmationTokenModel? ToModel(ConfirmationTokenEntity? entity) => entity == null
-        ? null
-        : new ConfirmationTokenModel
+    public ConfirmationTokenModel ToModel(ConfirmationTokenEntity entity) =>
+        new()
         {
             Id = entity.Id,
-            StudentId = entity.StudentId,
+            AccountId = entity.AccountId,
             TokenHash = entity.TokenHash,
             ConfirmedAt = entity.ConfirmedAt,
             ExpiresAt = entity.ExpiresAt,
