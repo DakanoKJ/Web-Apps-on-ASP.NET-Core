@@ -1,9 +1,10 @@
-﻿using PersonalAccount.Models.Students;
+﻿using PersonalAccount.Models;
 using PersonalAccount.Repository;
 
 namespace PersonalAccount.Services.Cabinet;
 
-public class StudentCabinetService(IStudentRepo<StudentModel> students, IConfirmationTokenRepo confirmationTokens) : IStudentCabinetService
+public class StudentCabinetService(IStudentProfileRepo studentProfiles) : IStudentCabinetService
 {
-    public Task<StudentModel?> GetStudentByIdAsync(int id) => students.GetByIdAsync(id);
+    public Task<StudentProfileModel?> GetStudentByAccountIdAsync(int accountId) =>
+        studentProfiles.GetByAccountIdAsync(accountId);
 }
