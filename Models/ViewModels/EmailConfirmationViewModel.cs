@@ -1,4 +1,4 @@
-﻿namespace PersonalAccount.Models;
+﻿namespace PersonalAccount.Models.ViewModels;
 
 public class EmailConfirmationViewModel
 {
