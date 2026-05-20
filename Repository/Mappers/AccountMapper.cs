@@ -1,10 +1,9 @@
 ﻿using PersonalAccount.Data.Entities;
 using PersonalAccount.Models;
-using PersonalAccount.Utils;
 
 namespace PersonalAccount.Repository.Mappers;
 
-public class AccountAuthMapper : IMapper<AccountEntity, AccountModel>
+public class AccountMapper : IMapper<AccountEntity, AccountModel>
 {
     public AccountEntity ToEntity(AccountModel model) =>
         new()
