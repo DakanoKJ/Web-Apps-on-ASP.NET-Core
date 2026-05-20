@@ -36,20 +36,21 @@ public class EmailConfirmationController(IConfirmationTokenService confirmation,
     public async Task<IActionResult> SendEmailConfirmation()
     {
         var studentId = User.GetId();
-        if (studentId == null) return RedirectToAction("Error", "Home");
+        var studentEmail = User.GetEmail();
+        if (studentId == null || studentEmail == null) return RedirectToAction("Error", "Home");
         var token = await confirmation.GenerateTokenAsync(studentId.Value);
         var confirmationUrl = Url.Action("Index", "EmailConfirmation", new
         {
             studentId, token
         }, Request.Scheme);
 
-        await emailSender.SendEmailAsync("shamraev.alexandr@gmail.com", "Подтверждение почты", $"""
-                                                                                                <head></head>
-                                                                                                <body>
-                                                                                                <a href="{confirmationUrl}">
-                                                                                                Подтвердить почту</a>
-                                                                                                </body>
-                                                                                                """);
+        await emailSender.SendEmailAsync(studentEmail, "Подтверждение почты", $"""
+                                                                               <head></head>
+                                                                               <body>
+                                                                               <a href="{confirmationUrl}">
+                                                                               Подтвердить почту</a>
+                                                                               </body>
+                                                                               """);
 
         return RedirectToAction("Index", "Cabinet");
     }

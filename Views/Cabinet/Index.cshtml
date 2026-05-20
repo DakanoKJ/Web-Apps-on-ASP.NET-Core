@@ -1,4 +1,4 @@
-﻿@model StudentModel
+﻿@model StudentWithEmailConfirmedModel
 
 @{
     ViewData["Title"] = "Личный кабинет";
@@ -26,10 +26,13 @@
 
             <form class="d-flex align-items-center" method="post" asp-controller="EmailConfirmation"
                   asp-action="SendEmailConfirmation">
-                <p class="mb-1">
-                    Email: @Model.Email
+                <p class="mb-1 @(Model.IsEmailConfirmed ? "text-success" : "")">
+                    @Model.Email
                 </p>
-                <button class="btn btn-link" type="submit">Подтвердить</button>
+                @if (!Model.IsEmailConfirmed)
+                {
+                    <button class="btn btn-link text-danger" type="submit">Подтвердить</button>
+                }
             </form>
 
         </div>

@@ -35,6 +35,8 @@ namespace PersonalAccount
 
             // Options
             builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("Smtp"));
+            if (builder.Environment.IsDevelopment())
+                builder.Services.Configure<DbSeederSettings>(builder.Configuration.GetSection("DbSeeder"));
 
             // Services
             builder.Services.AddScoped<IStudentAuthService, StudentAuthService>();
