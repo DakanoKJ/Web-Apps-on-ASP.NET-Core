@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PersonalAccount.Models;
+using PersonalAccount.Models.ViewModels;
 using PersonalAccount.Services.Auth;
 
 namespace PersonalAccount.Controllers;
 
-public class AccountController(IStudentAuthService auth) : Controller
+public class AccountController(IAuthService auth) : Controller
 {
     // method GET
     [HttpGet]
@@ -22,14 +23,14 @@ public class AccountController(IStudentAuthService auth) : Controller
     public async Task<IActionResult> Login(LoginViewModel login)
     {
         if (!ModelState.IsValid) return View(login);
-        var student = await auth.ValidateStudentAsync(login.Email, login.Password);
-        if (student is null)
+        var account = await auth.ValidateCredentialsAsync(login.Email, login.Password);
+        if (account is null)
         {
             ModelState.AddModelError(string.Empty, "Invalid login attempt");
             return View(login);
         }
 
-        await auth.SignInAsync(HttpContext, student);
+        await auth.SignInAsync(HttpContext, account);
         return Redirect(login.ReturnUrl ?? "/");
     }
 

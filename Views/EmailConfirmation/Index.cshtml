@@ -1,6 +1,8 @@
 ﻿@model EmailConfirmationViewModel
 
 <form asp-action="ConfirmEmail" asp-controller="EmailConfirmation" method="post">
+    <input type="hidden" asp-for="AccountId"/>
+    <input type="hidden" asp-for="Token"/>
     <button class="btn btn-primary" type="submit">Подтвердить почту</button>
 </form>
 

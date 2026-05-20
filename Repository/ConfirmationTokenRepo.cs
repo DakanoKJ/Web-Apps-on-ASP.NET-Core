@@ -12,19 +12,16 @@ public class ConfirmationTokenRepo(
 {
     private DbSet<ConfirmationTokenEntity> ConfirmationTokens => context.ConfirmationTokens;
 
-    public async Task<List<ConfirmationTokenModel>> GetByStudentIdAsync(int studentId)
-    {
-        var entities = await ConfirmationTokens
+    public async Task<List<ConfirmationTokenModel>> GetByAccountIdAsync(int accountId) =>
+        await ConfirmationTokens
             .AsNoTracking()
-            .Where(token => token.StudentId == studentId)
+            .Where(entity => entity.AccountId == accountId)
+            .Select(entity => mapper.ToModel(entity))
             .ToListAsync();
-
-        return entities.Select(entity => mapper.ToModel(entity)!).ToList();
-    }
 
     public async Task AddAsync(ConfirmationTokenModel token)
     {
-        await ConfirmationTokens.AddAsync(mapper.ToEntity(token)!);
+        await ConfirmationTokens.AddAsync(mapper.ToEntity(token));
         await context.SaveChangesAsync();
     }
 
