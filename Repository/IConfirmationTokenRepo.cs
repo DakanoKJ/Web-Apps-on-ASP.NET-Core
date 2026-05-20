@@ -4,7 +4,7 @@ namespace PersonalAccount.Repository;
 
 public interface IConfirmationTokenRepo
 {
-    Task<List<ConfirmationTokenModel>> GetByStudentIdAsync(int studentId);
+    Task<List<ConfirmationTokenModel>> GetByAccountIdAsync(int accountId);
     Task AddAsync(ConfirmationTokenModel token);
     Task ConfirmAsync(int id);
 }
