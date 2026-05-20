@@ -7,12 +7,10 @@
 <div class="container">
     <div class="d-flex justify-content-between align-content-center">
         <h1 class="mb-4">Личный кабинет студента</h1>
-        <form method="post" asp-controller="Account" asp-action="Logout">
-            <button class="btn btn-secondary" type="submit">Выйти</button>
-        </form>
+
     </div>
 
-    <div class="card">
+    <div class="card w-50">
         @if (Model.PhotoUrl != null)
         {
             <img class="card-img-top" src="@Model.PhotoUrl" alt="Фото студента"/>
@@ -25,9 +23,15 @@
             <p class="mb-1">
                 Группа: @Model.GroupName
             </p>
-            <p class="mb-1">
-                Email: @Model.Email
-            </p>
+
+            <form class="d-flex align-items-center" method="post" asp-controller="EmailConfirmation"
+                  asp-action="SendEmailConfirmation">
+                <p class="mb-1">
+                    Email: @Model.Email
+                </p>
+                <button class="btn btn-link" type="submit">Подтвердить</button>
+            </form>
+
         </div>
     </div>
 </div>

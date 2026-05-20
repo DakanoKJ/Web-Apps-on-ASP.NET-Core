@@ -22,7 +22,7 @@ public class EmailSender(IOptions<SmtpSettings> options) : IEmailSender
 
         using var client = new SmtpClient();
         client.Timeout = _settings.Timeout;
-        await client.ConnectAsync(_settings.Host, _settings.Port, SecureSocketOptions.SslOnConnect);
+        await client.ConnectAsync(_settings.Host, _settings.Port, SecureSocketOptions.StartTls);
         await client.AuthenticateAsync(_settings.Username, _settings.Password);
         await client.SendAsync(message);
         await client.DisconnectAsync(true);

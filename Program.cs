@@ -10,6 +10,7 @@ using PersonalAccount.Repository.Mappers;
 using PersonalAccount.Services.Auth;
 using PersonalAccount.Services.Cabinet;
 using PersonalAccount.Services.Db;
+using PersonalAccount.Services.Email;
 
 namespace PersonalAccount
 {
@@ -32,30 +33,40 @@ namespace PersonalAccount
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlite(builder.Configuration.GetConnectionString("SqliteDefaultConnection")));
 
+            // Options
+            builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("Smtp"));
+
+            // Services
             builder.Services.AddScoped<IStudentAuthService, StudentAuthService>();
             builder.Services.AddScoped<IStudentCabinetService, StudentCabinetService>();
             builder.Services.AddScoped<IConfirmationTokenService, ConfirmationTokenTokenService>();
-            
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
+            if (builder.Environment.IsDevelopment())
+                builder.Services.AddScoped<DbSeeder>();
+
+            // Repositories
             builder.Services.AddScoped<IStudentRepo<StudentAuthModel>, StudentRepo<StudentAuthModel>>();
             builder.Services.AddScoped<IStudentRepo<StudentModel>, StudentRepo<StudentModel>>();
             builder.Services.AddScoped<IConfirmationTokenRepo, ConfirmationTokenRepo>();
-            
-            builder.Services.AddScoped<IMapper<StudentEntity, StudentAuthModel>, StudentAuthMapper>();
-            builder.Services.AddScoped<IMapper<StudentEntity, StudentModel>, StudentMapper>();
-            builder.Services.AddScoped<IMapper<ConfirmationTokenEntity, ConfirmationTokenModel>, ConfirmationTokenMapper>();
 
-            builder.Services.AddScoped<IPasswordHasher<StudentAuthModel>, PasswordHasher<StudentAuthModel>>();
-            if (builder.Environment.IsDevelopment())
-                builder.Services.AddScoped<DbSeeder>();
+            // Mappers
+            builder.Services.AddSingleton<IMapper<StudentEntity, StudentAuthModel>, StudentAuthMapper>();
+            builder.Services.AddSingleton<IMapper<StudentEntity, StudentModel>, StudentMapper>();
+            builder.Services
+                .AddSingleton<IMapper<ConfirmationTokenEntity, ConfirmationTokenModel>, ConfirmationTokenMapper>();
+
+            // Others
+            builder.Services.AddSingleton<IPasswordHasher<StudentAuthModel>, PasswordHasher<StudentAuthModel>>();
+
 
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-               using var scope = app.Services.CreateScope();
-               var seeder = scope.ServiceProvider.GetRequiredService<DbSeeder>();
-               await seeder.SeedAsync();
+                using var scope = app.Services.CreateScope();
+                var seeder = scope.ServiceProvider.GetRequiredService<DbSeeder>();
+                await seeder.SeedAsync();
             }
             else
             {

@@ -2,11 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using PersonalAccount.Models;
 using PersonalAccount.Services.Auth;
+using PersonalAccount.Services.Email;
 using PersonalAccount.Utils;
 
 namespace PersonalAccount.Controllers;
 
-public class EmailConfirmationController(IConfirmationTokenService confirmation) : Controller
+public class EmailConfirmationController(IConfirmationTokenService confirmation, IEmailSender emailSender) : Controller
 {
     [HttpGet]
     public IActionResult Index(int studentId, string token)
@@ -24,7 +25,7 @@ public class EmailConfirmationController(IConfirmationTokenService confirmation)
     {
         var confirmed = await confirmation.ValidateTokenAsync(model.StudentId,  model.Token);
         if (!confirmed)
-            return BadRequest("Ссылка подтверждения недействительна или устарела.");
+            return RedirectToAction("Error", "Home");
         
         return RedirectToAction("Index", "Cabinet");
     }
@@ -36,12 +37,19 @@ public class EmailConfirmationController(IConfirmationTokenService confirmation)
     {
         var studentId = User.GetId();
         if (studentId == null) return RedirectToAction("Error", "Home");
-        var token = confirmation.GenerateTokenAsync(studentId.Value);
+        var token = await confirmation.GenerateTokenAsync(studentId.Value);
         var confirmationUrl = Url.Action("Index", "EmailConfirmation", new
         {
             studentId, token
         }, Request.Scheme);
-        // TODO: Add Smtp service
+
+        await emailSender.SendEmailAsync("shamraev.alexandr@gmail.com", "Подтверждение почты", $"""
+                                                                                                <head></head>
+                                                                                                <body>
+                                                                                                <a href="{confirmationUrl}">
+                                                                                                Подтвердить почту</a>
+                                                                                                </body>
+                                                                                                """);
 
         return RedirectToAction("Index", "Cabinet");
     }
