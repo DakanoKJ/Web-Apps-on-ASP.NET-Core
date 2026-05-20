@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using PersonalAccount.Data;
 using PersonalAccount.Data.Entities;
 using PersonalAccount.Models;
-using PersonalAccount.Models.Students;
 using PersonalAccount.Repository;
 using PersonalAccount.Repository.Mappers;
 using PersonalAccount.Services.Auth;
@@ -36,29 +35,30 @@ namespace PersonalAccount
             // Options
             builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("Smtp"));
             if (builder.Environment.IsDevelopment())
-                builder.Services.Configure<DbSeederSettings>(builder.Configuration.GetSection("DbSeeder"));
+                builder.Services.Configure<DbBootstrapSettings>(builder.Configuration.GetSection("DbSeeder"));
 
             // Services
-            builder.Services.AddScoped<IStudentAuthService, StudentAuthService>();
-            builder.Services.AddScoped<IStudentCabinetService, StudentCabinetService>();
-            builder.Services.AddScoped<IConfirmationTokenService, ConfirmationTokenTokenService>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IConfirmationTokenService, ConfirmationTokenTokenService>();
+                // Cabinet Services
+            builder.Services.AddScoped<IStudentCabinetService, StudentCabinetService>();
             if (builder.Environment.IsDevelopment())
-                builder.Services.AddScoped<DbSeeder>();
+                builder.Services.AddScoped<DbBootstrapService>();
 
             // Repositories
-            builder.Services.AddScoped<IStudentRepo<StudentAuthModel>, StudentRepo<StudentAuthModel>>();
-            builder.Services.AddScoped<IStudentRepo<StudentModel>, StudentRepo<StudentModel>>();
+            builder.Services.AddScoped<IAccountRepo, AccountRepo>();
             builder.Services.AddScoped<IConfirmationTokenRepo, ConfirmationTokenRepo>();
+            builder.Services.AddScoped<IStudentProfileRepo, StudentProfileRepo>();
 
             // Mappers
-            builder.Services.AddSingleton<IMapper<StudentEntity, StudentAuthModel>, StudentAuthMapper>();
-            builder.Services.AddSingleton<IMapper<StudentEntity, StudentModel>, StudentMapper>();
+            builder.Services.AddSingleton<IMapper<StudentProfileEntity, StudentProfileModel>, StudentProfileMapper>();
+            builder.Services.AddSingleton<IMapper<AccountEntity, AccountModel>, AccountMapper>();
             builder.Services
                 .AddSingleton<IMapper<ConfirmationTokenEntity, ConfirmationTokenModel>, ConfirmationTokenMapper>();
 
             // Others
-            builder.Services.AddSingleton<IPasswordHasher<StudentAuthModel>, PasswordHasher<StudentAuthModel>>();
+            builder.Services.AddSingleton<IPasswordHasher<AccountModel>, PasswordHasher<AccountModel>>();
 
 
             var app = builder.Build();
@@ -67,7 +67,7 @@ namespace PersonalAccount
             if (app.Environment.IsDevelopment())
             {
                 using var scope = app.Services.CreateScope();
-                var seeder = scope.ServiceProvider.GetRequiredService<DbSeeder>();
+                var seeder = scope.ServiceProvider.GetRequiredService<DbBootstrapService>();
                 await seeder.SeedAsync();
             }
             else
