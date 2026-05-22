@@ -19,4 +19,12 @@ public class StudentProfileRepo(
             .FirstOrDefaultAsync(entity => entity.AccountId == accountId) ?? throw new KeyNotFoundException();
         return mapper.ToModel(entity);
     }
+
+    public async Task<List<StudentProfileModel>> GetAllAsync()
+    {
+        return await StudentProfiles
+            .AsNoTracking()
+            .Select(entity => mapper.ToModel(entity))
+            .ToListAsync();
+    }
 }

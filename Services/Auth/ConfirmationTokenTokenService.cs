@@ -9,7 +9,7 @@ public class ConfirmationTokenTokenService(IConfirmationTokenRepo confirmationTo
 {
     public async Task<string> GenerateTokenAsync(int accountId)
     {
-        var token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+        var token = Guid.NewGuid().ToString();
         var confirmation = new ConfirmationTokenModel
         {
             AccountId = accountId,
@@ -23,8 +23,9 @@ public class ConfirmationTokenTokenService(IConfirmationTokenRepo confirmationTo
     public async Task<bool> ValidateTokenAsync(int accountId, string token)
     {
         var confirmations = await confirmationTokens.GetByAccountIdAsync(accountId);
+        var tokenHash = HashToken(token);
         var confirmation = confirmations.FirstOrDefault(confirmation =>
-            confirmation.TokenHash == HashToken(token)
+            confirmation.TokenHash == tokenHash
             && confirmation.ExpiresAt > DateTime.UtcNow
             && confirmation.ConfirmedAt is null);
 

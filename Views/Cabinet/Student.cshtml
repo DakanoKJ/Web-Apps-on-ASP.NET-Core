@@ -24,14 +24,14 @@
                 Группа: @Model.GroupName
             </p>
 
-            <form class="d-flex align-items-center" method="post" asp-controller="EmailConfirmation"
+            <form class="d-flex gap-2 align-items-center" method="post" asp-controller="EmailConfirmation"
                   asp-action="SendEmailConfirmation">
-                <p class="mb-1 @(Model.IsEmailConfirmed ? "text-success" : "")">
+                <span class="@(Model.IsEmailConfirmed ? "text-success" : "")">
                     @Model.Email
-                </p>
+                </span>
                 @if (!Model.IsEmailConfirmed)
                 {
-                    <button class="btn btn-link text-danger" type="submit">Подтвердить</button>
+                    <button class="btn btn-link nav-link text-danger" type="submit">Подтвердить</button>
                 }
             </form>
 
