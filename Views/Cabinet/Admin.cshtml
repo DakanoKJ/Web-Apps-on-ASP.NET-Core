@@ -1,0 +1,36 @@
+﻿@model AdminCabinetViewModel
+
+@{
+    ViewData["Title"] = "Панель администратора";
+}
+
+<div class="container">
+    <div class="d-flex justify-content-between align-content-center">
+        <h1 class="mb-4">Панель администратора</h1>
+    </div>
+
+    <div class="container d-flex flex-wrap gap-4">
+        @foreach (var studentInfo in Model.StudentInfos)
+        {
+            <div class="card" style="width: 400px">
+                <div class="gap-2 d-grid align-items-stretch" style="grid-template-columns: repeat(2, 1fr)">
+                    <div class="w-100 h-100"
+                         style="background-image: url(@studentInfo.PhotoUrl); background-size: cover">
+
+                    </div>
+                    <div class="d-flex flex-column gap-2 w-100 h-100">
+                        <p class="card-header">
+                            @studentInfo.FullName
+                        </p>
+                        <p class="mb-1">
+                            Группа: @studentInfo.GroupName
+                        </p>
+                        <p>
+                            @studentInfo.Email
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -4,5 +4,5 @@ namespace PersonalAccount.Services.Cabinet;
 
 public interface IStudentCabinetService
 {
-    Task<StudentProfileModel?> GetStudentByAccountIdAsync(int accountId);
+    Task<StudentProfileModel?> GetStudentAsync(int accountId);
 }

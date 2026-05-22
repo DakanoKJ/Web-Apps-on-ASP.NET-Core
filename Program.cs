@@ -35,14 +35,15 @@ namespace PersonalAccount
             // Options
             builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("Smtp"));
             if (builder.Environment.IsDevelopment())
-                builder.Services.Configure<DbBootstrapSettings>(builder.Configuration.GetSection("DbSeeder"));
+                builder.Services.Configure<DbBootstrapSettings>(builder.Configuration.GetSection("DbBootstrap"));
 
             // Services
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IConfirmationTokenService, ConfirmationTokenTokenService>();
-                // Cabinet Services
+            // Cabinet Services
             builder.Services.AddScoped<IStudentCabinetService, StudentCabinetService>();
+            builder.Services.AddScoped<IAdminCabinetService, AdminCabinetService>();
             if (builder.Environment.IsDevelopment())
                 builder.Services.AddScoped<DbBootstrapService>();
 

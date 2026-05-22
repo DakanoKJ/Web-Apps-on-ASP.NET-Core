@@ -20,8 +20,6 @@ public class DbBootstrapService(
 
     public async Task SeedAsync()
     {
-        await context.Database.MigrateAsync();
-
         var hasStudents = await context.Accounts.AnyAsync();
         if (hasStudents) return;
 

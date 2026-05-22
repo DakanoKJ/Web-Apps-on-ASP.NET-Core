@@ -5,4 +5,5 @@ namespace PersonalAccount.Repository;
 public interface IStudentProfileRepo
 {
     Task<StudentProfileModel?> GetByAccountIdAsync(int accountId);
+    Task<List<StudentProfileModel>> GetAllAsync();
 }

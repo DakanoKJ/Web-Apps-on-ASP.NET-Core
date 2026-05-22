@@ -3,6 +3,7 @@ using PersonalAccount.Data;
 using PersonalAccount.Data.Entities;
 using PersonalAccount.Models;
 using PersonalAccount.Repository.Mappers;
+using PersonalAccount.Types;
 
 namespace PersonalAccount.Repository;
 
@@ -16,6 +17,15 @@ public class AccountRepo(AppDbContext context, IMapper<AccountEntity, AccountMod
             .AsNoTracking()
             .FirstOrDefaultAsync(entity => entity.Email == email);
         return entity == null ? null : mapper.ToModel(entity);
+    }
+
+    public async Task<List<AccountModel>> GetByRoleAsync(AccountRole role)
+    {
+        return await Accounts
+            .AsNoTracking()
+            .Where(entity => entity.Role == role)
+            .Select(entity => mapper.ToModel(entity))
+            .ToListAsync();
     }
 
     public async Task<AccountModel?> GetByIdAsync(int id)
