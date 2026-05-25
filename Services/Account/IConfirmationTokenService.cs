@@ -1,4 +1,4 @@
-﻿namespace PersonalAccount.Services.Auth;
+﻿namespace PersonalAccount.Services.Account;
 
 public interface IConfirmationTokenService
 {

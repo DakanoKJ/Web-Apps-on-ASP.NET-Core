@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PersonalAccount.Data;
 using PersonalAccount.Data.Entities;
+using PersonalAccount.Mappers;
 using PersonalAccount.Models;
-using PersonalAccount.Repository.Mappers;
 
-namespace PersonalAccount.Repository;
+namespace PersonalAccount.Repositories;
 
 public class StudentProfileRepo(
     AppDbContext context,
@@ -26,5 +26,11 @@ public class StudentProfileRepo(
             .AsNoTracking()
             .Select(entity => mapper.ToModel(entity))
             .ToListAsync();
+    }
+
+    public async Task AddAsync(StudentProfileModel studentProfile)
+    {
+        await StudentProfiles.AddAsync(mapper.ToEntity(studentProfile));
+        await context.SaveChangesAsync();
     }
 }

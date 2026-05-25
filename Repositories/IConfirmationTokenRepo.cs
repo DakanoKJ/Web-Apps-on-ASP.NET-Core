@@ -1,6 +1,6 @@
 ﻿using PersonalAccount.Models;
 
-namespace PersonalAccount.Repository;
+namespace PersonalAccount.Repositories;
 
 public interface IConfirmationTokenRepo
 {

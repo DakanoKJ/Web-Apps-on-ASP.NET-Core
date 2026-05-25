@@ -1,4 +1,4 @@
-﻿namespace PersonalAccount.Repository.Mappers;
+﻿namespace PersonalAccount.Mappers;
 
 public interface IMapper<TEntity, TModel>
 {

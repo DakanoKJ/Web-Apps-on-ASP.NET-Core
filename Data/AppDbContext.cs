@@ -8,6 +8,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<AccountEntity> Accounts => Set<AccountEntity>();
     public DbSet<StudentProfileEntity> StudentProfiles => Set<StudentProfileEntity>();
     public DbSet<ConfirmationTokenEntity> ConfirmationTokens => Set<ConfirmationTokenEntity>();
+    public DbSet<GroupEntity> Groups => Set<GroupEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -16,16 +17,16 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         {
             entity.ToTable("accounts");
             entity.HasKey(account => account.Id);
-            
+
             entity.Property(account => account.Id)
                 .HasColumnName("id")
                 .ValueGeneratedOnAdd();
-            
+
             entity.Property(account => account.Email)
                 .HasColumnName("email")
                 .HasMaxLength(255)
                 .IsRequired();
-            
+
             entity.Property(account => account.PasswordHash)
                 .HasColumnName("password_hash")
                 .IsRequired();
@@ -34,7 +35,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .HasColumnName("role")
                 .IsRequired();
         });
-        
+
         modelBuilder.Entity<StudentProfileEntity>(entity =>
         {
             entity.ToTable("student_profiles");
@@ -49,10 +50,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .HasMaxLength(255)
                 .IsRequired();
 
-            entity.Property(student => student.GroupName)
-                .HasColumnName("group_name")
-                .HasMaxLength(255)
-                .IsRequired();
+            entity.Property(student => student.GroupId)
+                .HasColumnName("group_id");
 
             entity.Property(student => student.PhotoUrl)
                 .HasColumnName("photo_url")
@@ -65,7 +64,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .WithOne(account => account.StudentProfile)
                 .HasForeignKey<StudentProfileEntity>(student => student.AccountId)
                 .OnDelete(DeleteBehavior.Cascade);
-
         });
 
         modelBuilder.Entity<ConfirmationTokenEntity>(entity =>
@@ -95,6 +93,35 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             entity.HasOne(token => token.Account)
                 .WithMany(student => student.ConfirmationTokens)
                 .HasForeignKey(token => token.AccountId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<GroupEntity>(entity =>
+        {
+            entity.ToTable("groups");
+            entity.HasKey(group => group.Id);
+
+            entity.Property(group => group.Id)
+                .HasColumnName("id")
+                .ValueGeneratedOnAdd();
+
+            entity.Property(group => group.Name)
+                .HasColumnName("name")
+                .HasMaxLength(255)
+                .IsRequired();
+
+            entity.Property(group => group.Description)
+                .HasColumnName("description")
+                .HasMaxLength(2047)
+                .IsRequired();
+
+            entity.Property(group => group.ImageUrl)
+                .HasColumnName("image_url")
+                .HasMaxLength(2047);
+
+            entity.HasMany(group => group.StudentProfiles)
+                .WithOne(student => student.Group)
+                .HasForeignKey(student => student.GroupId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
     }

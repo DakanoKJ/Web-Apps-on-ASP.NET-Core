@@ -2,18 +2,18 @@
 using PersonalAccount.Models;
 using PersonalAccount.Utils;
 
-namespace PersonalAccount.Repository.Mappers;
+namespace PersonalAccount.Mappers;
 
 public class StudentProfileMapper : IMapper<StudentProfileEntity, StudentProfileModel>
 {
-    public StudentProfileEntity ToEntity(StudentProfileModel profileModel) =>
+    public StudentProfileEntity ToEntity(StudentProfileModel model) =>
         new()
         {
-            Id = profileModel.Id,
-            AccountId = profileModel.AccountId,
-            PhotoUrl = profileModel.PhotoUrl?.ToString(),
-            FullName = profileModel.FullName,
-            GroupName = profileModel.GroupName,
+            Id = model.Id,
+            AccountId = model.AccountId,
+            PhotoUrl = model.PhotoUrl?.ToString(),
+            FullName = model.FullName,
+            GroupId = model.GroupId,
         };
 
     public StudentProfileModel ToModel(StudentProfileEntity entity) =>
@@ -23,6 +23,6 @@ public class StudentProfileMapper : IMapper<StudentProfileEntity, StudentProfile
             AccountId = entity.AccountId,
             PhotoUrl = entity.PhotoUrl?.ToUri(),
             FullName = entity.FullName,
-            GroupName = entity.GroupName,
+            GroupId = entity.GroupId,
         };
 }

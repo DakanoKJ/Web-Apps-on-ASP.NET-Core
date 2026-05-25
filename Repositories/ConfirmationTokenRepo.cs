@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PersonalAccount.Data;
 using PersonalAccount.Data.Entities;
+using PersonalAccount.Mappers;
 using PersonalAccount.Models;
-using PersonalAccount.Repository.Mappers;
 
-namespace PersonalAccount.Repository;
+namespace PersonalAccount.Repositories;
 
 public class ConfirmationTokenRepo(
     AppDbContext context,

@@ -35,7 +35,7 @@ namespace PersonalAccount.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("password_hash");
 
-                    b.Property<int>("Role")
+                    b.Property<int>("Roles")
                         .HasColumnType("INTEGER")
                         .HasColumnName("role");
 
@@ -75,6 +75,35 @@ namespace PersonalAccount.Migrations
                     b.ToTable("confirmation_tokens", (string)null);
                 });
 
+            modelBuilder.Entity("PersonalAccount.Data.Entities.GroupEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2047)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("description");
+
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(2047)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("image_url");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("groups", (string)null);
+                });
+
             modelBuilder.Entity("PersonalAccount.Data.Entities.StudentProfileEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -92,11 +121,9 @@ namespace PersonalAccount.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("full_name");
 
-                    b.Property<string>("GroupName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("group_name");
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("group_id");
 
                     b.Property<string>("PhotoUrl")
                         .HasMaxLength(2047)
@@ -107,6 +134,8 @@ namespace PersonalAccount.Migrations
 
                     b.HasIndex("AccountId")
                         .IsUnique();
+
+                    b.HasIndex("GroupId");
 
                     b.ToTable("student_profiles", (string)null);
                 });
@@ -130,7 +159,14 @@ namespace PersonalAccount.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("PersonalAccount.Data.Entities.GroupEntity", "Group")
+                        .WithMany("StudentProfiles")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.Navigation("Account");
+
+                    b.Navigation("Group");
                 });
 
             modelBuilder.Entity("PersonalAccount.Data.Entities.AccountEntity", b =>
@@ -138,6 +174,11 @@ namespace PersonalAccount.Migrations
                     b.Navigation("ConfirmationTokens");
 
                     b.Navigation("StudentProfile");
+                });
+
+            modelBuilder.Entity("PersonalAccount.Data.Entities.GroupEntity", b =>
+                {
+                    b.Navigation("StudentProfiles");
                 });
 #pragma warning restore 612, 618
         }

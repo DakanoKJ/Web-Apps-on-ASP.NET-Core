@@ -1,7 +1,7 @@
 ﻿using PersonalAccount.Data.Entities;
 using PersonalAccount.Models;
 
-namespace PersonalAccount.Repository.Mappers;
+namespace PersonalAccount.Mappers;
 
 public class AccountMapper : IMapper<AccountEntity, AccountModel>
 {
@@ -10,7 +10,7 @@ public class AccountMapper : IMapper<AccountEntity, AccountModel>
         {
             Id = model.Id,
             Email = model.Email,
-            Roles = model.Roles,
+            Roles = model.Role,
             PasswordHash = model.PasswordHash,
         };
 
@@ -19,7 +19,7 @@ public class AccountMapper : IMapper<AccountEntity, AccountModel>
         {
             Id = entity.Id,
             Email = entity.Email,
-            Roles = entity.Roles,
+            Role = entity.Roles,
             PasswordHash = entity.PasswordHash,
         };
 }

@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PersonalAccount.Data;
 using PersonalAccount.Data.Entities;
+using PersonalAccount.Mappers;
 using PersonalAccount.Models;
-using PersonalAccount.Repository.Mappers;
 using PersonalAccount.Types;
 
-namespace PersonalAccount.Repository;
+namespace PersonalAccount.Repositories;
 
 public class AccountRepo(AppDbContext context, IMapper<AccountEntity, AccountModel> mapper) : IAccountRepo
 {
@@ -28,9 +28,11 @@ public class AccountRepo(AppDbContext context, IMapper<AccountEntity, AccountMod
             .ToListAsync();
     }
 
-    public async Task<AccountModel?> GetByIdAsync(int id)
+    public async Task AddAccountAsync(AccountModel account)
     {
-        var entity = await Accounts.FindAsync(id) ?? throw new KeyNotFoundException();
-        return mapper.ToModel(entity);
+        await Accounts.AddAsync(mapper.ToEntity(account));
+        await context.SaveChangesAsync();
     }
+
+    public async Task<bool> AnyAsync() => await Accounts.AnyAsync();
 }

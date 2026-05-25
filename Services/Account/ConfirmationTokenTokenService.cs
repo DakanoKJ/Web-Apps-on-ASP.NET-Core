@@ -1,11 +1,11 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using PersonalAccount.Models;
-using PersonalAccount.Repository;
+using PersonalAccount.Repositories;
 
-namespace PersonalAccount.Services.Auth;
+namespace PersonalAccount.Services.Account;
 
-public class ConfirmationTokenTokenService(IConfirmationTokenRepo confirmationTokens) : IConfirmationTokenService
+public class ConfirmationTokenTokenService(IConfirmationTokenRepo confirmationTokenRepo) : IConfirmationTokenService
 {
     public async Task<string> GenerateTokenAsync(int accountId)
     {
@@ -16,13 +16,13 @@ public class ConfirmationTokenTokenService(IConfirmationTokenRepo confirmationTo
             ExpiresAt = DateTime.UtcNow.AddMinutes(30),
             TokenHash = HashToken(token),
         };
-        await confirmationTokens.AddAsync(confirmation);
+        await confirmationTokenRepo.AddAsync(confirmation);
         return token;
     }
 
     public async Task<bool> ValidateTokenAsync(int accountId, string token)
     {
-        var confirmations = await confirmationTokens.GetByAccountIdAsync(accountId);
+        var confirmations = await confirmationTokenRepo.GetByAccountIdAsync(accountId);
         var tokenHash = HashToken(token);
         var confirmation = confirmations.FirstOrDefault(confirmation =>
             confirmation.TokenHash == tokenHash
@@ -33,7 +33,7 @@ public class ConfirmationTokenTokenService(IConfirmationTokenRepo confirmationTo
 
         try
         {
-            await confirmationTokens.ConfirmAsync(confirmation.Id);
+            await confirmationTokenRepo.ConfirmAsync(confirmation.Id);
         }
         catch
         {
@@ -45,7 +45,7 @@ public class ConfirmationTokenTokenService(IConfirmationTokenRepo confirmationTo
 
     public async Task<bool> HasConfirmedTokensAsync(int accountId)
     {
-        var confirmations = await confirmationTokens.GetByAccountIdAsync(accountId);
+        var confirmations = await confirmationTokenRepo.GetByAccountIdAsync(accountId);
         return confirmations.Any(confirmation => confirmation.ConfirmedAt is not null);
     }
 
