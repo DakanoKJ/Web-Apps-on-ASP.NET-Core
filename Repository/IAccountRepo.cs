@@ -6,7 +6,7 @@ namespace PersonalAccount.Repository
     public interface IAccountRepo
     {
         public Task<AccountModel?> GetByEmailAsync(string email);
-        public Task<List<AccountModel>> GetByRoleAsync(AccountRole role);
+        public Task<List<AccountModel>> GetByRoleAsync(AccountRoles roles);
         public Task<AccountModel?> GetByIdAsync(int id);
     }
 }

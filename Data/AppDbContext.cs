@@ -30,7 +30,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .HasColumnName("password_hash")
                 .IsRequired();
 
-            entity.Property(account => account.Role)
+            entity.Property(account => account.Roles)
                 .HasColumnName("role")
                 .IsRequired();
         });

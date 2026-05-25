@@ -10,7 +10,7 @@ public class AccountMapper : IMapper<AccountEntity, AccountModel>
         {
             Id = model.Id,
             Email = model.Email,
-            Role = model.Role,
+            Roles = model.Roles,
             PasswordHash = model.PasswordHash,
         };
 
@@ -19,7 +19,7 @@ public class AccountMapper : IMapper<AccountEntity, AccountModel>
         {
             Id = entity.Id,
             Email = entity.Email,
-            Role = entity.Role,
+            Roles = entity.Roles,
             PasswordHash = entity.PasswordHash,
         };
 }

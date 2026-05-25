@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PersonalAccount.Models.ViewModels;
 using PersonalAccount.Services.Auth;
 using PersonalAccount.Services.Email;
 using PersonalAccount.Utils;
+using PersonalAccount.ViewModels;
 
 namespace PersonalAccount.Controllers;
 

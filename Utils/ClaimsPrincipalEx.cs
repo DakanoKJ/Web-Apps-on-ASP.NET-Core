@@ -10,6 +10,6 @@ public static class ClaimsPrincipalEx
 
     public static string? GetEmail(this ClaimsPrincipal user) => user.FindFirstValue(ClaimTypes.Email);
 
-    public static AccountRole? GetRole(this ClaimsPrincipal user) =>
-        Enum.TryParse<AccountRole>(user.FindFirstValue(ClaimTypes.Role), out var role) ? role : null;
+    public static AccountRoles? GetRole(this ClaimsPrincipal user) =>
+        Enum.TryParse<AccountRoles>(user.FindFirstValue(ClaimTypes.Role), out var role) ? role : null;
 }

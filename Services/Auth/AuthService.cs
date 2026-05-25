@@ -24,7 +24,7 @@ namespace PersonalAccount.Services.Auth
             var claims = new List<Claim>
             {
                 new(ClaimTypes.NameIdentifier, account.Id.ToString()),
-                new(ClaimTypes.Role, account.Role.ToString()),
+                new(ClaimTypes.Role, account.Roles.ToString()),
                 new(ClaimTypes.Email, account.Email),
             };
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

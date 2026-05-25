@@ -8,7 +8,7 @@ public class AccountEntity
     
     public string Email { get; set; } = string.Empty;
     public string PasswordHash { get; set; } = string.Empty;
-    public AccountRole Role { get; set; } = AccountRole.Student;
+    public AccountRoles Roles { get; set; } = AccountRoles.Student;
 
     public StudentProfileEntity? StudentProfile { get; set; }
     public List<ConfirmationTokenEntity> ConfirmationTokens { get; set; } = [];
