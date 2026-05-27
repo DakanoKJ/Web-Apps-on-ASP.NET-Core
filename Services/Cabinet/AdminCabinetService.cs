@@ -8,7 +8,7 @@ public class AdminCabinetService(IStudentProfileRepo studentProfileRepo, IAccoun
     : IAdminCabinetService
 {
     public async Task<Dictionary<int, AccountModel>> GetAllStudentAccountsAsync() =>
-        (await accountRepo.GetByRoleAsync(AccountRoles.Student)).ToDictionary(account => account.Id);
+        (await accountRepo.GetAllByRoleAsync(AccountRoles.Student)).ToDictionary(account => account.Id);
 
     public async Task<List<StudentProfileModel>> GetAllStudentProfilesAsync() => await studentProfileRepo.GetAllAsync();
 

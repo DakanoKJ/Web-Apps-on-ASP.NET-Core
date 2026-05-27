@@ -25,6 +25,6 @@ public class DbBootstrapService(
         };
 
         account.PasswordHash = hasher.HashPassword(account, _settings.Password);
-        await accountRepo.AddAccountAsync(account);
+        await accountRepo.AddAsync(account);
     }
 }

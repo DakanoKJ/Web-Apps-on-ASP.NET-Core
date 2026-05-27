@@ -1,10 +1,9 @@
-﻿using PersonalAccount.Models;
+﻿using PersonalAccount.Data.Entities;
+using PersonalAccount.Models;
 
 namespace PersonalAccount.Repositories;
 
-public interface IStudentProfileRepo
+public interface IStudentProfileRepo : IRepo<StudentProfileEntity, StudentProfileModel>
 {
     Task<StudentProfileModel?> GetByAccountIdAsync(int accountId);
-    Task<List<StudentProfileModel>> GetAllAsync();
-    Task AddAsync(StudentProfileModel studentProfile);
 }

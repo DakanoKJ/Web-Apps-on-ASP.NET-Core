@@ -54,7 +54,7 @@ namespace PersonalAccount.Services.Account
             var password = RandomNumberGenerator.GetHexString(12);
             account.PasswordHash = hasher.HashPassword(account, password);
 
-            await accountRepo.AddAccountAsync(account);
+            await accountRepo.AddAsync(account);
 
             return password;
         }
