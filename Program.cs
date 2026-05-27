@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PersonalAccount.Data;
 using PersonalAccount.Data.Entities;
+using PersonalAccount.Mappers;
 using PersonalAccount.Models;
-using PersonalAccount.Repository;
-using PersonalAccount.Repository.Mappers;
-using PersonalAccount.Services.Auth;
+using PersonalAccount.Repositories;
+using PersonalAccount.Services.Account;
 using PersonalAccount.Services.Cabinet;
 using PersonalAccount.Services.Db;
 using PersonalAccount.Services.Email;
@@ -38,8 +38,8 @@ namespace PersonalAccount
                 builder.Services.Configure<DbBootstrapSettings>(builder.Configuration.GetSection("DbBootstrap"));
 
             // Services
-            builder.Services.AddScoped<IEmailSender, EmailSender>();
-            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IEmailSenderService, EmailSenderService>();
+            builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IConfirmationTokenService, ConfirmationTokenTokenService>();
             // Cabinet Services
             builder.Services.AddScoped<IStudentCabinetService, StudentCabinetService>();
@@ -49,12 +49,14 @@ namespace PersonalAccount
 
             // Repositories
             builder.Services.AddScoped<IAccountRepo, AccountRepo>();
+            builder.Services.AddScoped<IGroupRepo, GroupRepo>();
             builder.Services.AddScoped<IConfirmationTokenRepo, ConfirmationTokenRepo>();
             builder.Services.AddScoped<IStudentProfileRepo, StudentProfileRepo>();
 
             // Mappers
             builder.Services.AddSingleton<IMapper<StudentProfileEntity, StudentProfileModel>, StudentProfileMapper>();
             builder.Services.AddSingleton<IMapper<AccountEntity, AccountModel>, AccountMapper>();
+            builder.Services.AddSingleton<IMapper<GroupEntity, GroupModel>, GroupMapper>();
             builder.Services
                 .AddSingleton<IMapper<ConfirmationTokenEntity, ConfirmationTokenModel>, ConfirmationTokenMapper>();
 

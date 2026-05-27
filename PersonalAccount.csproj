@@ -17,4 +17,8 @@
     <PackageReference Include="MimeKit" Version="4.16.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <AdditionalFiles Include="Views\StudentCabinet\Index.cshtml" />
+  </ItemGroup>
+
 </Project>

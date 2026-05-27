@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PersonalAccount.Models.ViewModels;
-using PersonalAccount.Services.Auth;
+using PersonalAccount.Services.Account;
 using PersonalAccount.Services.Email;
 using PersonalAccount.Utils;
+using PersonalAccount.ViewModels;
 
 namespace PersonalAccount.Controllers;
 
-public class EmailConfirmationController(IConfirmationTokenService confirmation, IEmailSender emailSender) : Controller
+public class EmailConfirmationController(
+    IConfirmationTokenService confirmationTokenService,
+    IEmailSenderService emailSenderService) : Controller
 {
     [HttpGet]
     public IActionResult Index(int accountId, string token)
@@ -18,16 +20,16 @@ public class EmailConfirmationController(IConfirmationTokenService confirmation,
             Token = token
         });
     }
-    
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ConfirmEmail(EmailConfirmationViewModel model)
     {
-        var confirmed = await confirmation.ValidateTokenAsync(model.AccountId,  model.Token);
+        var confirmed = await confirmationTokenService.ValidateTokenAsync(model.AccountId, model.Token);
         if (!confirmed)
             return RedirectToAction("Error", "Home");
-        
-        return RedirectToAction("Student", "Cabinet");
+
+        return RedirectToAction("Index", "Cabinet");
     }
 
     [HttpPost]
@@ -38,20 +40,20 @@ public class EmailConfirmationController(IConfirmationTokenService confirmation,
         var accountId = User.GetId();
         var studentEmail = User.GetEmail();
         if (accountId == null || studentEmail == null) return RedirectToAction("Error", "Home");
-        var token = await confirmation.GenerateTokenAsync(accountId.Value);
+        var token = await confirmationTokenService.GenerateTokenAsync(accountId.Value);
         var confirmationUrl = Url.Action("Index", "EmailConfirmation", new
         {
             accountId, token
         }, Request.Scheme);
 
-        await emailSender.SendEmailAsync(studentEmail, "Подтверждение почты", $"""
-                                                                               <head></head>
-                                                                               <body>
-                                                                               <a href="{confirmationUrl}">
-                                                                               Подтвердить почту</a>
-                                                                               </body>
-                                                                               """);
+        await emailSenderService.SendEmailAsync(studentEmail, "Подтверждение почты", $"""
+             <head></head>
+             <body>
+             <a href="{confirmationUrl}">
+             Подтвердить почту</a>
+             </body>
+             """);
 
-        return RedirectToAction("Student", "Cabinet");
+        return RedirectToAction("Index", "Cabinet");
     }
 }
