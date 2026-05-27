@@ -9,5 +9,7 @@ public class AccountEntity : Entity
     public AccountRoles Role { get; set; } = AccountRoles.Student;
 
     public StudentProfileEntity? StudentProfile { get; set; }
+    public TeacherProfileEntity? TeacherProfile { get; set; }
+    public List<TeacherGroupSubjectEntity> TeacherGroupSubjects { get; set; } = [];
     public List<ConfirmationTokenEntity> ConfirmationTokens { get; set; } = [];
 }

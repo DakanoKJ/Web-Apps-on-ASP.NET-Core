@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PersonalAccount.Data;
 
@@ -10,9 +11,11 @@ using PersonalAccount.Data;
 namespace PersonalAccount.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260527170531_CreateTeacherAndSubjects")]
+    partial class CreateTeacherAndSubjects
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.8");
@@ -171,7 +174,7 @@ namespace PersonalAccount.Migrations
                     b.Property<int>("SubjectId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("TeacherAccountId")
+                    b.Property<int>("TeacherProfileId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -180,7 +183,7 @@ namespace PersonalAccount.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.HasIndex("TeacherAccountId");
+                    b.HasIndex("TeacherProfileId");
 
                     b.ToTable("teacher_group_subjects", (string)null);
                 });
@@ -258,9 +261,9 @@ namespace PersonalAccount.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PersonalAccount.Data.Entities.AccountEntity", "TeacherAccount")
+                    b.HasOne("PersonalAccount.Data.Entities.TeacherProfileEntity", "TeacherProfile")
                         .WithMany("TeacherGroupSubjects")
-                        .HasForeignKey("TeacherAccountId")
+                        .HasForeignKey("TeacherProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -268,7 +271,7 @@ namespace PersonalAccount.Migrations
 
                     b.Navigation("Subject");
 
-                    b.Navigation("TeacherAccount");
+                    b.Navigation("TeacherProfile");
                 });
 
             modelBuilder.Entity("PersonalAccount.Data.Entities.TeacherProfileEntity", b =>
@@ -288,8 +291,6 @@ namespace PersonalAccount.Migrations
 
                     b.Navigation("StudentProfile");
 
-                    b.Navigation("TeacherGroupSubjects");
-
                     b.Navigation("TeacherProfile");
                 });
 
@@ -301,6 +302,11 @@ namespace PersonalAccount.Migrations
                 });
 
             modelBuilder.Entity("PersonalAccount.Data.Entities.SubjectEntity", b =>
+                {
+                    b.Navigation("TeacherGroupSubjects");
+                });
+
+            modelBuilder.Entity("PersonalAccount.Data.Entities.TeacherProfileEntity", b =>
                 {
                     b.Navigation("TeacherGroupSubjects");
                 });

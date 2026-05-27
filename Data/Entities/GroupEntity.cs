@@ -7,4 +7,5 @@ public class GroupEntity : Entity
     public string? ImageUrl { get; set; }
 
     public List<StudentProfileEntity> StudentProfiles { get; set; } = [];
+    public List<TeacherGroupSubjectEntity> TeacherGroupSubjects { get; set; } = [];
 }
