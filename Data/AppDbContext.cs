@@ -13,6 +13,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<StudentProfileEntity> StudentProfiles => Set<StudentProfileEntity>();
     public DbSet<TeacherProfileEntity> TeacherProfiles => Set<TeacherProfileEntity>();
 
+    public DbSet<TeacherGroupSubjectEntity> TeacherGroupSubjects => Set<TeacherGroupSubjectEntity>();
+
     public DbSet<GroupEntity> Groups => Set<GroupEntity>();
     public DbSet<SubjectEntity> Subjects => Set<SubjectEntity>();
 
@@ -36,7 +38,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .HasColumnName("role")
                 .IsRequired();
         });
-        
+
         modelBuilder.Entity<SubjectEntity>(entity =>
         {
             entity.BuildEntity("subjects");
@@ -46,7 +48,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .HasMaxLength(255)
                 .IsRequired();
         });
-        
+
         modelBuilder.Entity<GroupEntity>(entity =>
         {
             entity.BuildEntity("groups");
@@ -74,6 +76,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<TeacherGroupSubjectEntity>(entity =>
         {
             entity.BuildEntity("teacher_group_subjects");
+            entity.HasIndex(link => link.TeacherAccountId);
 
             entity.HasOne(link => link.TeacherAccount)
                 .WithMany(teacher => teacher.TeacherGroupSubjects)
@@ -84,7 +87,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .WithMany(subject => subject.TeacherGroupSubjects)
                 .HasForeignKey(link => link.SubjectId)
                 .OnDelete(DeleteBehavior.Cascade);
-            
+
             entity.HasOne(link => link.Group)
                 .WithMany(subject => subject.TeacherGroupSubjects)
                 .HasForeignKey(link => link.GroupId)

@@ -5,8 +5,8 @@ using PersonalAccount.Models;
 namespace PersonalAccount.Repositories;
 
 public interface IRepo<TEntity, TModel>
-    where TEntity : Entity
-    where TModel : Model
+    where TEntity : Entity, new()
+    where TModel : Model, new()
 {
     // CREATE
     Task AddAsync(TModel model);

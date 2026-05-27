@@ -3,4 +3,4 @@ using PersonalAccount.Models;
 
 namespace PersonalAccount.Repositories;
 
-public interface IStudentProfileRepo : IProfileRepo<StudentProfileEntity, StudentProfileModel>;
+public interface ISubjectRepo : IRepo<SubjectEntity, SubjectModel>;
