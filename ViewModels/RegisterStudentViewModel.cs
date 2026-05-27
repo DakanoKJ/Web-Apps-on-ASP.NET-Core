@@ -2,7 +2,7 @@
 
 namespace PersonalAccount.ViewModels;
 
-public class RegisterStudentViewModel
+public class RegisterStudentViewModel : ViewModel
 {
     [Required(ErrorMessage = "FullName is required")]
     public string FullName { get; set; } = string.Empty;

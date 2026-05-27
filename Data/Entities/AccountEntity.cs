@@ -2,10 +2,8 @@
 
 namespace PersonalAccount.Data.Entities;
 
-public class AccountEntity
+public class AccountEntity : Entity
 {
-    public int Id { get; set; }
-    
     public string Email { get; set; } = string.Empty;
     public string PasswordHash { get; set; } = string.Empty;
     public AccountRoles Role { get; set; } = AccountRoles.Student;

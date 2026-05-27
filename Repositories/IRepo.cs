@@ -1,10 +1,12 @@
 ﻿using System.Linq.Expressions;
+using PersonalAccount.Data.Entities;
+using PersonalAccount.Models;
 
 namespace PersonalAccount.Repositories;
 
 public interface IRepo<TEntity, TModel>
-    where TEntity : class
-    where TModel : class
+    where TEntity : Entity
+    where TModel : Model
 {
     // CREATE
     Task AddAsync(TModel model);

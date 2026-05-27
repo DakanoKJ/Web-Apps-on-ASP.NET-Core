@@ -2,9 +2,8 @@
 
 namespace PersonalAccount.Models;
 
-public class AccountModel
+public class AccountModel : Model
 {
-    public int Id { get; set; }
     public string Email { get; set; } = string.Empty;
     public string PasswordHash { get; set; } = string.Empty;
     public AccountRoles Role { get; set; } = AccountRoles.Student;

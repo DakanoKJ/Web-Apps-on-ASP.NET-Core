@@ -1,8 +1,7 @@
 ﻿namespace PersonalAccount.Models;
 
-public class StudentProfileModel
+public class StudentProfileModel : Model
 {
-    public int Id { get; set; }
     public int AccountId { get; set; }
     public int? GroupId { get; set; }
     public string FullName { get; set; } = string.Empty;

@@ -1,7 +1,9 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using PersonalAccount.Data;
+using PersonalAccount.Data.Entities;
 using PersonalAccount.Mappers;
+using PersonalAccount.Models;
 
 namespace PersonalAccount.Repositories;
 
@@ -10,8 +12,8 @@ public abstract class Repo<TEntity, TModel>(
     IMapper<TEntity, TModel> mapper,
     Func<AppDbContext, DbSet<TEntity>> tableSelector
 ) : IRepo<TEntity, TModel>
-    where TEntity : class
-    where TModel : class
+    where TEntity : Entity
+    where TModel : Model
 {
     protected AppDbContext Ctx { get; } = ctx;
     protected IMapper<TEntity, TModel> Mapper { get; } = mapper;
