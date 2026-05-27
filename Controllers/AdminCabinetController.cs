@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PersonalAccount.Constants;
 using PersonalAccount.Models;
 using PersonalAccount.Services.Account;
 using PersonalAccount.Services.Cabinet;
@@ -22,15 +23,10 @@ public class AdminCabinetController(
         var profiles = await cabinetService.GetAllStudentProfilesAsync();
         var groups = await cabinetService.GetAllGroupsAsync();
 
-        groups.Add(-1, new GroupModel
-        {
-            Name = "Без группы"
-        });
-
         var groupInfos = profiles.GroupBy(profile => profile.GroupId)
             .ToDictionary(students =>
                 {
-                    var group = groups[students.Key ?? -1];
+                    var group = groups[students.Key];
                     return new AdminCabinetGroupInfoViewModel
                     {
                         Name = group.Name,

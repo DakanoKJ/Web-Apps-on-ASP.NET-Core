@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using PersonalAccount.Constants;
 using PersonalAccount.Models;
 using PersonalAccount.Repositories;
 using PersonalAccount.Types;
@@ -8,12 +9,19 @@ namespace PersonalAccount.Services.Db;
 
 public class DbBootstrapService(
     IAccountRepo accountRepo,
+    IGroupRepo groupRepo,
     IPasswordHasher<AccountModel> hasher,
     IOptions<DbBootstrapSettings> options)
 {
     private readonly DbBootstrapSettings _settings = options.Value;
 
-    public async Task SeedAsync()
+    public async Task SeedAsync() =>
+        await Task.WhenAll(
+            SeedAccountAsync(),
+            SeedNoGroupAsync()
+        );
+
+    private async Task SeedAccountAsync()
     {
         var hasStudents = await accountRepo.AnyAsync();
         if (hasStudents) return;
@@ -26,5 +34,19 @@ public class DbBootstrapService(
 
         account.PasswordHash = hasher.HashPassword(account, _settings.Password);
         await accountRepo.AddAsync(account);
+    }
+
+    private async Task SeedNoGroupAsync()
+    {
+        var hasNoGroup = await groupRepo.ContainsByIdAsync(GroupConstants.NoGroup.Id);
+        if (hasNoGroup) return;
+
+        var noGroup = new GroupModel
+        {
+            Id = GroupConstants.NoGroup.Id,
+            Name = GroupConstants.NoGroup.Name,
+            Description = GroupConstants.NoGroup.Description
+        };
+        await groupRepo.AddAsync(noGroup);
     }
 }

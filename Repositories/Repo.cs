@@ -55,6 +55,12 @@ public abstract class Repo<TEntity, TModel>(
 
     public async Task<bool> AnyAsync() => await Table.AnyAsync();
 
+    public async Task<bool> ContainsByIdAsync(int id)
+    {
+        var entity = await Table.FindAsync(id);
+        return entity != null;
+    }
+
     public async Task<bool> UpdateByIdAsync(int id, Action<TEntity> update)
     {
         var entity = await Table.FindAsync(id);

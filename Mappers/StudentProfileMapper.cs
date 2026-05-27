@@ -1,4 +1,5 @@
-﻿using PersonalAccount.Data.Entities;
+﻿using PersonalAccount.Constants;
+using PersonalAccount.Data.Entities;
 using PersonalAccount.Models;
 using PersonalAccount.Utils;
 
@@ -13,7 +14,7 @@ public class StudentProfileMapper : IMapper<StudentProfileEntity, StudentProfile
             AccountId = model.AccountId,
             PhotoUrl = model.PhotoUrl?.ToString(),
             FullName = model.FullName,
-            GroupId = model.GroupId,
+            GroupId = model.GroupId == GroupConstants.NoGroup.Id ? null : model.GroupId,
         };
 
     public StudentProfileModel ToModel(StudentProfileEntity entity) =>
@@ -23,6 +24,6 @@ public class StudentProfileMapper : IMapper<StudentProfileEntity, StudentProfile
             AccountId = entity.AccountId,
             PhotoUrl = entity.PhotoUrl?.ToUri(),
             FullName = entity.FullName,
-            GroupId = entity.GroupId,
+            GroupId = entity.GroupId ?? GroupConstants.NoGroup.Id,
         };
 }

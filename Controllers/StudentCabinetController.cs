@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PersonalAccount.Constants;
 using PersonalAccount.Services.Account;
 using PersonalAccount.Services.Cabinet;
 using PersonalAccount.Types;
@@ -26,7 +27,8 @@ public class StudentCabinetController(
         if (student is null) return RedirectToAction("Error", "Home");
 
         var isEmailConfirmed = await confirmationTokenService.HasConfirmedTokensAsync(student.AccountId);
-        var group = student.GroupId == null ? null : await cabinetService.GetGroupAsync(student.GroupId.Value);
+        var group = await cabinetService.GetGroupAsync(student.GroupId);
+        if (group is null) return RedirectToAction("Error", "Home");
 
         return View(new StudentCabinetViewModel
         {
@@ -34,7 +36,7 @@ public class StudentCabinetController(
             FullName = student.FullName,
             IsEmailConfirmed = isEmailConfirmed,
             PhotoUrl = student.PhotoUrl?.ToString(),
-            GroupName = group?.Name ?? "Без группы",
+            GroupName = group.Name,
         });
     }
 }

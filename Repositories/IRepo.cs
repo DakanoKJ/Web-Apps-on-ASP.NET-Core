@@ -17,6 +17,7 @@ public interface IRepo<TEntity, TModel>
     Task<List<TModel>> GetAllAsync();
     Task<List<TModel>> GetAllByAsync(Expression<Func<TEntity, bool>> predicate);
     Task<bool> AnyAsync();
+    Task<bool> ContainsByIdAsync(int id);
 
     // UPDATE
     Task<bool> UpdateByIdAsync(int id, Action<TEntity> update);

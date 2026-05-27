@@ -6,10 +6,3 @@ public enum AccountRoles
     Teacher = 1,
     Administrator = 2,
 }
-
-public static class AccountRoleConstants
-{
-    public const string Student = "Student";
-    public const string Teacher = "Teacher";
-    public const string Administrator = "Administrator";
-}
