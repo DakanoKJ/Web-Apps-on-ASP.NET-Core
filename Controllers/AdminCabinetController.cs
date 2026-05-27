@@ -20,31 +20,45 @@ public class AdminCabinetController(
     public async Task<IActionResult> Index()
     {
         var accounts = await cabinetService.GetAllStudentAccountsAsync();
-        var profiles = await cabinetService.GetAllStudentProfilesAsync();
-        var groups = await cabinetService.GetAllGroupsAsync();
+        var accountDictionary = accounts.ToDictionary(account => account.Id);
 
-        var groupInfos = profiles.GroupBy(profile => profile.GroupId)
-            .ToDictionary(students =>
+        var groups = await cabinetService.GetAllGroupsAsync();
+        var groupDictionary = groups.ToDictionary(group => group.Id);
+
+        var studentProfiles = await cabinetService.GetAllStudentProfilesAsync();
+
+        var groupIdsOrder = groups
+            .OrderByDescending(group => group.Name)
+            .Select(group => group.Id)
+            .ToList();
+
+        var groupInfos = groupDictionary.Select(group =>
+                (group.Key, new AdminCabinetGroupInfoViewModel
                 {
-                    var group = groups[students.Key];
-                    return new AdminCabinetGroupInfoViewModel
+                    Name = group.Value.Name,
+                    Description = group.Value.Description,
+                    ImageUrl = group.Value.ImageUrl?.ToString()
+                }))
+            .ToDictionary();
+
+        var studentInfos = studentProfiles.GroupBy(profile => profile.GroupId)
+            .ToDictionary(
+                group => group.Key,
+                group => group.Select(student => new AdminCabinetStudentInfoViewModel
                     {
-                        Name = group.Name,
-                        Description = group.Description,
-                        ImageUrl = group.ImageUrl?.ToString()
-                    };
-                },
-                students => students.Select(student => new AdminCabinetStudentInfoViewModel
-                {
-                    Email = accounts[student.AccountId].Email,
-                    FullName = student.FullName,
-                    PhotoUrl = student.PhotoUrl?.ToString()
-                }).ToList());
+                        Email = accountDictionary[student.AccountId].Email,
+                        FullName = student.FullName,
+                        PhotoUrl = student.PhotoUrl?.ToString()
+                    })
+                    .ToList()
+            );
 
 
         return View(new AdminCabinetViewModel
         {
-            GroupInfos = groupInfos
+            GroupIdsOrder = groupIdsOrder,
+            GroupInfos = groupInfos,
+            StudentInfos = studentInfos
         });
     }
 

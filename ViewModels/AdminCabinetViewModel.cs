@@ -16,6 +16,7 @@ public class AdminCabinetStudentInfoViewModel : ViewModel
 
 public class AdminCabinetViewModel : ViewModel
 {
-    public Dictionary<AdminCabinetGroupInfoViewModel, List<AdminCabinetStudentInfoViewModel>> GroupInfos { get; set; } =
-        [];
+    public List<int> GroupIdsOrder { get; set; } = [];
+    public Dictionary<int, AdminCabinetGroupInfoViewModel> GroupInfos { get; set; } = [];
+    public Dictionary<int, List<AdminCabinetStudentInfoViewModel>> StudentInfos { get; set; } = [];
 }
