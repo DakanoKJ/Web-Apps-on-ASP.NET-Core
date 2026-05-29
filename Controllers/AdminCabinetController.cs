@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PersonalAccount.Constants;
-using PersonalAccount.Models;
 using PersonalAccount.Services.Account;
 using PersonalAccount.Services.Cabinet;
 using PersonalAccount.Services.Email;
@@ -32,14 +31,16 @@ public class AdminCabinetController(
             .Select(group => group.Id)
             .ToList();
 
-        var groupInfos = groupDictionary.Select(group =>
-                (group.Key, new AdminCabinetGroupInfoViewModel
+        var groupInfos = groupDictionary
+            .ToDictionary(
+                group => group.Key,
+                group => new AdminCabinetGroupInfoViewModel
                 {
                     Name = group.Value.Name,
                     Description = group.Value.Description,
                     ImageUrl = group.Value.ImageUrl?.ToString()
-                }))
-            .ToDictionary();
+                }
+            );
 
         var studentInfos = studentProfiles.GroupBy(profile => profile.GroupId)
             .ToDictionary(

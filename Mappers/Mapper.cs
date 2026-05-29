@@ -3,7 +3,7 @@ using PersonalAccount.Models;
 
 namespace PersonalAccount.Mappers;
 
-public class Mapper<TEntity, TModel> : IMapper<TEntity, TModel>
+public abstract class Mapper<TEntity, TModel> : IMapper<TEntity, TModel>
     where TEntity : Entity, new()
     where TModel : Model, new()
 {

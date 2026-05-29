@@ -1,6 +1,3 @@
 ﻿namespace PersonalAccount.Data.Entities;
 
-public class TeacherProfileEntity : ProfileEntity
-{
-
-}
+public class TeacherProfileEntity : ProfileEntity;

@@ -18,7 +18,6 @@ public class ConfirmationTokenMapper : Mapper<ConfirmationTokenEntity, Confirmat
     public override ConfirmationTokenModel ToModel(ConfirmationTokenEntity entity)
     {
         var model = base.ToModel(entity);
-        model.Id = entity.Id;
         model.AccountId = entity.AccountId;
         model.TokenHash = entity.TokenHash;
         model.ConfirmedAt = entity.ConfirmedAt;

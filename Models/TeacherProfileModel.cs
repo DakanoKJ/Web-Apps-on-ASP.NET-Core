@@ -2,4 +2,7 @@
 
 public class TeacherProfileModel : ProfileModel
 {
+    public override bool Equals(object? obj) =>
+        obj is TeacherProfileModel
+        && base.Equals(obj);
 }

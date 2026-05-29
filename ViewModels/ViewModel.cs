@@ -1,3 +1,3 @@
 ﻿namespace PersonalAccount.ViewModels;
 
-public class ViewModel;
+public abstract class ViewModel;

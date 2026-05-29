@@ -1,11 +1,61 @@
-﻿@model dynamic
+﻿@model TeacherCabinetViewModel
 
 @{
     ViewData["Title"] = "Кабинет преподавателя";
 }
 
 <div class="container">
-<div class="d-flex justify-content-between align-content-center">
-    <h1 class="mb-4">Кабинет преподавателя</h1>
-</div>
+    <div class="d-flex justify-content-between align-content-center">
+        <h1 class="mb-4">Кабинет преподавателя</h1>
+    </div>
+    <div class="card w-50">
+        @if (Model.PhotoUrl != null)
+        {
+            <img class="card-img-top" src="@Model.PhotoUrl" alt="Фото студента"/>
+        }
+        <header class="card-header">
+            @Model.FullName
+        </header>
+
+        <div class="card-body">
+            <form class="d-flex gap-2 align-items-center" method="post" asp-controller="EmailConfirmation"
+                  asp-action="SendEmailConfirmation">
+                <span class="@(Model.IsEmailConfirmed ? "text-success" : "")">
+                    @Model.Email
+                </span>
+                @if (!Model.IsEmailConfirmed)
+                {
+                    <button class="btn btn-link nav-link text-danger" type="submit">Подтвердить</button>
+                }
+            </form>
+
+        </div>
+    </div>
+    <div class="container d-flex flex-column align-items-stretch gap-5">
+        @foreach (var subjectId in Model.SubjectIdsOrder)
+        {
+            var subjectInfo = Model.SubjectInfos[subjectId];
+            var groupInfos = Model.GroupsBySubjectInfos[subjectId];
+
+            <div class="container d-flex flex-column align-items-stretch gap-2">
+                <div class="card d-flex align-items-start justify-content-center p-5"
+                     style="height: 100px">
+                    <h3 class=" text-center fw-bold">
+                        @subjectInfo.Name
+                    </h3>
+                </div>
+                <div class="container d-flex flex-wrap gap-4">
+                    @foreach (var groupInfo in groupInfos)
+                    {
+                        <div class="card" style="width: 300px; height: 150px">
+                            <div class="w-100 h-100 card-body d-flex align-items-center justify-content-center"
+                                 style="background-image: url(@groupInfo.ImageUrl); background-size: cover">
+                                <span class="text-center text-white">@groupInfo.Name</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
 </div>
