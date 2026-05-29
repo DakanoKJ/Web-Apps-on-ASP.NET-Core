@@ -44,19 +44,28 @@ namespace PersonalAccount
             // Cabinet Services
             builder.Services.AddScoped<IStudentCabinetService, StudentCabinetService>();
             builder.Services.AddScoped<IAdminCabinetService, AdminCabinetService>();
+            builder.Services.AddScoped<ITeacherCabinetService, TeacherCabinetService>();
             if (builder.Environment.IsDevelopment())
                 builder.Services.AddScoped<DbBootstrapService>();
 
             // Repositories
             builder.Services.AddScoped<IAccountRepo, AccountRepo>();
             builder.Services.AddScoped<IGroupRepo, GroupRepo>();
+            builder.Services.AddScoped<ISubjectRepo, SubjectRepo>();
+            builder.Services.AddScoped<ITeacherGroupSubjectRepo, TeacherGroupSubjectRepo>();
             builder.Services.AddScoped<IConfirmationTokenRepo, ConfirmationTokenRepo>();
             builder.Services.AddScoped<IStudentProfileRepo, StudentProfileRepo>();
+            builder.Services.AddScoped<ITeacherProfileRepo, TeacherProfileRepo>();
 
             // Mappers
             builder.Services.AddSingleton<IMapper<StudentProfileEntity, StudentProfileModel>, StudentProfileMapper>();
+            builder.Services.AddSingleton<IMapper<TeacherProfileEntity, TeacherProfileModel>, TeacherProfileMapper>();
+            builder.Services
+                .AddSingleton<IMapper<TeacherGroupSubjectEntity, TeacherGroupSubjectModel>,
+                    TeacherGroupSubjectMapper>();
             builder.Services.AddSingleton<IMapper<AccountEntity, AccountModel>, AccountMapper>();
             builder.Services.AddSingleton<IMapper<GroupEntity, GroupModel>, GroupMapper>();
+            builder.Services.AddSingleton<IMapper<SubjectEntity, SubjectModel>, SubjectMapper>();
             builder.Services
                 .AddSingleton<IMapper<ConfirmationTokenEntity, ConfirmationTokenModel>, ConfirmationTokenMapper>();
 

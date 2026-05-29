@@ -1,13 +1,12 @@
-﻿using PersonalAccount.Models;
+﻿using PersonalAccount.Data.Entities;
+using PersonalAccount.Models;
 using PersonalAccount.Types;
 
 namespace PersonalAccount.Repositories
 {
-    public interface IAccountRepo
+    public interface IAccountRepo : IRepo<AccountEntity, AccountModel>
     {
         public Task<AccountModel?> GetByEmailAsync(string email);
-        public Task<List<AccountModel>> GetByRoleAsync(AccountRoles roles);
-        public Task AddAccountAsync(AccountModel account);
-        public Task<bool> AnyAsync();
+        public Task<List<AccountModel>> GetAllByRoleAsync(AccountRoles role);
     }
 }

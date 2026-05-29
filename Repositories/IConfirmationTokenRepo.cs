@@ -1,10 +1,10 @@
-﻿using PersonalAccount.Models;
+﻿using PersonalAccount.Data.Entities;
+using PersonalAccount.Models;
 
 namespace PersonalAccount.Repositories;
 
-public interface IConfirmationTokenRepo
+public interface IConfirmationTokenRepo : IRepo<ConfirmationTokenEntity, ConfirmationTokenModel>
 {
-    Task<List<ConfirmationTokenModel>> GetByAccountIdAsync(int accountId);
-    Task AddAsync(ConfirmationTokenModel token);
-    Task ConfirmAsync(int id);
+    Task<List<ConfirmationTokenModel>> GetAllByAccountIdAsync(int accountId);
+    Task ConfirmAsync(int id, DateTime confirmedAt);
 }

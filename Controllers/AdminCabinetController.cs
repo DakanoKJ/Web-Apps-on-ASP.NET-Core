@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PersonalAccount.Constants;
 using PersonalAccount.Models;
 using PersonalAccount.Services.Account;
 using PersonalAccount.Services.Cabinet;
@@ -19,36 +20,45 @@ public class AdminCabinetController(
     public async Task<IActionResult> Index()
     {
         var accounts = await cabinetService.GetAllStudentAccountsAsync();
-        var profiles = await cabinetService.GetAllStudentProfilesAsync();
+        var accountDictionary = accounts.ToDictionary(account => account.Id);
+
         var groups = await cabinetService.GetAllGroupsAsync();
+        var groupDictionary = groups.ToDictionary(group => group.Id);
 
-        groups.Add(-1, new GroupModel
-        {
-            Name = "Без группы"
-        });
+        var studentProfiles = await cabinetService.GetAllStudentProfilesAsync();
 
-        var groupInfos = profiles.GroupBy(profile => profile.GroupId)
-            .ToDictionary(students =>
+        var groupIdsOrder = groups
+            .OrderByDescending(group => group.Name)
+            .Select(group => group.Id)
+            .ToList();
+
+        var groupInfos = groupDictionary.Select(group =>
+                (group.Key, new AdminCabinetGroupInfoViewModel
                 {
-                    var group = groups[students.Key ?? -1];
-                    return new AdminCabinetGroupInfoViewModel
+                    Name = group.Value.Name,
+                    Description = group.Value.Description,
+                    ImageUrl = group.Value.ImageUrl?.ToString()
+                }))
+            .ToDictionary();
+
+        var studentInfos = studentProfiles.GroupBy(profile => profile.GroupId)
+            .ToDictionary(
+                group => group.Key,
+                group => group.Select(student => new AdminCabinetStudentInfoViewModel
                     {
-                        Name = group.Name,
-                        Description = group.Description,
-                        ImageUrl = group.ImageUrl?.ToString()
-                    };
-                },
-                students => students.Select(student => new AdminCabinetStudentInfoViewModel
-                {
-                    Email = accounts[student.AccountId].Email,
-                    FullName = student.FullName,
-                    PhotoUrl = student.PhotoUrl?.ToString()
-                }).ToList());
+                        Email = accountDictionary[student.AccountId].Email,
+                        FullName = student.FullName,
+                        PhotoUrl = student.PhotoUrl?.ToString()
+                    })
+                    .ToList()
+            );
 
 
         return View(new AdminCabinetViewModel
         {
-            GroupInfos = groupInfos
+            GroupIdsOrder = groupIdsOrder,
+            GroupInfos = groupInfos,
+            StudentInfos = studentInfos
         });
     }
 

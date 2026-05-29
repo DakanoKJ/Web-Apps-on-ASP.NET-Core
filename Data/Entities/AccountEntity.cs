@@ -2,14 +2,14 @@
 
 namespace PersonalAccount.Data.Entities;
 
-public class AccountEntity
+public class AccountEntity : Entity
 {
-    public int Id { get; set; }
-    
     public string Email { get; set; } = string.Empty;
     public string PasswordHash { get; set; } = string.Empty;
-    public AccountRoles Roles { get; set; } = AccountRoles.Student;
+    public AccountRoles Role { get; set; } = AccountRoles.Student;
 
     public StudentProfileEntity? StudentProfile { get; set; }
+    public TeacherProfileEntity? TeacherProfile { get; set; }
+    public List<TeacherGroupSubjectEntity> TeacherGroupSubjects { get; set; } = [];
     public List<ConfirmationTokenEntity> ConfirmationTokens { get; set; } = [];
 }

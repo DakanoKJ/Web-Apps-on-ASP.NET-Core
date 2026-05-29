@@ -10,8 +10,11 @@
     </div>
 
     <div class="container d-flex flex-column align-items-stretch gap-5">
-        @foreach (var (groupInfo, studentInfos) in Model.GroupInfos)
+        @foreach (var groupId in Model.GroupIdsOrder)
         {
+            var groupInfo = Model.GroupInfos[groupId];
+            var studentInfos = Model.StudentInfos[groupId];
+            
             <div class="container d-flex flex-column align-items-stretch gap-2">
                 <div class="card d-flex align-items-start justify-content-center p-5"
                      style="height: 100px; background-color: #2b2f32; background-image: url(@groupInfo.ImageUrl); background-size: cover">

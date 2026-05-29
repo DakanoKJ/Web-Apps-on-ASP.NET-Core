@@ -9,20 +9,17 @@ namespace PersonalAccount.Controllers;
 public class CabinetController : Controller
 {
     [HttpGet]
-    public async Task<IActionResult> Index()
+    public IActionResult Index()
     {
         var role = User.GetRole();
         if (role is null) return Forbid();
 
-        switch (role)
+        return role switch
         {
-            case AccountRoles.Student:
-                return RedirectToAction("Index", "StudentCabinet");
-            case AccountRoles.Administrator:
-                return RedirectToAction("Index", "AdminCabinet");
-            case AccountRoles.Teacher:
-            default:
-                return RedirectToAction("Error", "Home");
-        }
+            AccountRoles.Student => RedirectToAction("Index", "StudentCabinet"),
+            AccountRoles.Administrator => RedirectToAction("Index", "AdminCabinet"),
+            AccountRoles.Teacher => RedirectToAction("Index", "TeacherCabinet"),
+            _ => RedirectToAction("Error", "Home")
+        };
     }
 }

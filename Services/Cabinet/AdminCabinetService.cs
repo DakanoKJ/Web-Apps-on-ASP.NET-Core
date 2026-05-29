@@ -7,13 +7,12 @@ namespace PersonalAccount.Services.Cabinet;
 public class AdminCabinetService(IStudentProfileRepo studentProfileRepo, IAccountRepo accountRepo, IGroupRepo groupRepo)
     : IAdminCabinetService
 {
-    public async Task<Dictionary<int, AccountModel>> GetAllStudentAccountsAsync() =>
-        (await accountRepo.GetByRoleAsync(AccountRoles.Student)).ToDictionary(account => account.Id);
+    public async Task<List<AccountModel>> GetAllStudentAccountsAsync() =>
+        await accountRepo.GetAllByRoleAsync(AccountRoles.Student);
 
     public async Task<List<StudentProfileModel>> GetAllStudentProfilesAsync() => await studentProfileRepo.GetAllAsync();
 
-    public async Task<Dictionary<int, GroupModel>> GetAllGroupsAsync() =>
-        (await groupRepo.GetAllAsync()).ToDictionary(group => group.Id);
+    public async Task<List<GroupModel>> GetAllGroupsAsync() => await groupRepo.GetAllAsync();
 
     public async Task AddStudentProfileAsync(string email, string fullName)
     {
