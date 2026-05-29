@@ -32,7 +32,15 @@ public abstract class Repo<TEntity, TModel>(
         return entity == null ? null : Mapper.ToModel(entity);
     }
 
-    public async Task<TModel?> GetByAsync(Expression<Func<TEntity, bool>> predicate)
+    public async Task<List<TModel>> GetAllAsync() =>
+        await Table
+            .AsNoTracking()
+            .Select(entity => Mapper.ToModel(entity))
+            .ToListAsync();
+
+    public async Task<bool> AnyAsync() => await Table.AnyAsync();
+    
+    protected async Task<TModel?> GetByAsync(Expression<Func<TEntity, bool>> predicate)
     {
         var entity = await Table
             .AsNoTracking()
@@ -40,20 +48,14 @@ public abstract class Repo<TEntity, TModel>(
         return entity == null ? null : Mapper.ToModel(entity);
     }
 
-    public async Task<List<TModel>> GetAllAsync() =>
-        await Table
-            .AsNoTracking()
-            .Select(entity => Mapper.ToModel(entity))
-            .ToListAsync();
 
-    public async Task<List<TModel>> GetAllByAsync(Expression<Func<TEntity, bool>> predicate) =>
+    protected async Task<List<TModel>> GetAllByAsync(Expression<Func<TEntity, bool>> predicate) =>
         await Table
             .AsNoTracking()
             .Where(predicate)
             .Select(entity => Mapper.ToModel(entity))
             .ToListAsync();
 
-    public async Task<bool> AnyAsync() => await Table.AnyAsync();
 
     public async Task<bool> ContainsByIdAsync(int id)
     {
@@ -61,22 +63,11 @@ public abstract class Repo<TEntity, TModel>(
         return entity != null;
     }
 
-    public async Task<bool> UpdateByIdAsync(int id, Action<TEntity> update)
+    protected async Task UpdateByIdAsync(int id, Action<TEntity> updateAction)
     {
         var entity = await Table.FindAsync(id);
-        if (entity == null) return false;
-        update(entity);
+        if (entity == null) throw new KeyNotFoundException();
+        updateAction(entity);
         await Ctx.SaveChangesAsync();
-        return true;
-    }
-
-    public async Task<bool> DeleteByIdAsync(int id)
-    {
-        var entity = await Table.FindAsync(id);
-        if (entity == null) return false;
-
-        Table.Remove(entity);
-        await Ctx.SaveChangesAsync();
-        return true;
     }
 }
