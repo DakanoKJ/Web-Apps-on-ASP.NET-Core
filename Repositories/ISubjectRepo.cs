@@ -3,4 +3,4 @@ using PersonalAccount.Models;
 
 namespace PersonalAccount.Repositories;
 
-public interface ISubjectRepo : IRepo<SubjectEntity, SubjectModel>;
+public interface ISubjectRepo : IRepo<SubjectModel>;

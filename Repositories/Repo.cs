@@ -11,7 +11,7 @@ public abstract class Repo<TEntity, TModel>(
     AppDbContext ctx,
     IMapper<TEntity, TModel> mapper,
     Func<AppDbContext, DbSet<TEntity>> tableSelector
-) : IRepo<TEntity, TModel>
+) : IRepo<TModel>
     where TEntity : Entity, new()
     where TModel : Model, new()
 {

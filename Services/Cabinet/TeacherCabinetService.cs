@@ -6,9 +6,13 @@ namespace PersonalAccount.Services.Cabinet;
 public class TeacherCabinetService(
     IGroupRepo groupRepo,
     ISubjectRepo subjectRepo,
-    ITeacherGroupSubjectRepo teacherGroupSubjectRepo
+    ITeacherGroupSubjectRepo teacherGroupSubjectRepo,
+    ITeacherProfileRepo teacherProfileRepo
 ) : ITeacherCabinetService
 {
+    public async Task<TeacherProfileModel?> GetTeacherProfileAsync(int teacherAccountId) =>
+        await teacherProfileRepo.GetByAccountIdAsync(teacherAccountId);
+
     public async Task<List<TeacherGroupSubjectModel>> GetAllTeacherGroupSubjectsAsync(int teacherAccountId) =>
         await teacherGroupSubjectRepo.GetAllByTeacherAccountIdAsync(teacherAccountId);
 
@@ -25,7 +29,8 @@ public class TeacherCabinetService(
         return subjects.ToList();
     }
 
-    public async Task<Dictionary<int, List<GroupModel>>> GetAllGroupsBySubjects(List<TeacherGroupSubjectModel> teacherGroupSubjects)
+    public async Task<Dictionary<int, List<GroupModel>>> GetAllGroupsBySubjects(
+        List<TeacherGroupSubjectModel> teacherGroupSubjects)
     {
         var groupsBySubject = new Dictionary<int, List<GroupModel>>();
         foreach (var teacherGroupSubject in teacherGroupSubjects)

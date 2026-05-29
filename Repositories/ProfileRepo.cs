@@ -11,7 +11,7 @@ public class ProfileRepo<TProfileEntity, TProfileModel>(
     IMapper<TProfileEntity, TProfileModel> mapper,
     Func<AppDbContext, DbSet<TProfileEntity>> tableSelector)
     : Repo<TProfileEntity, TProfileModel>(ctx, mapper, tableSelector),
-        IProfileRepo<TProfileEntity, TProfileModel>
+        IProfileRepo<TProfileModel>
     where TProfileEntity : ProfileEntity, new()
     where TProfileModel : ProfileModel, new()
 {

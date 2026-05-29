@@ -4,7 +4,11 @@ using PersonalAccount.Types;
 
 namespace PersonalAccount.Services.Cabinet;
 
-public class AdminCabinetService(IStudentProfileRepo studentProfileRepo, IAccountRepo accountRepo, IGroupRepo groupRepo)
+public class AdminCabinetService(
+    IStudentProfileRepo studentProfileRepo,
+    ITeacherProfileRepo teacherProfileRepo,
+    IAccountRepo accountRepo,
+    IGroupRepo groupRepo)
     : IAdminCabinetService
 {
     public async Task<List<AccountModel>> GetAllStudentAccountsAsync() =>
@@ -14,19 +18,11 @@ public class AdminCabinetService(IStudentProfileRepo studentProfileRepo, IAccoun
 
     public async Task<List<GroupModel>> GetAllGroupsAsync() => await groupRepo.GetAllAsync();
 
-    public async Task AddStudentProfileAsync(string email, string fullName)
-    {
-        var account = await accountRepo.GetByEmailAsync(email);
-        if (account == null) return;
+    public async Task AddStudentProfileAsync(string email, string fullName) =>
+        await AddProfileAsync(studentProfileRepo, email, fullName);
 
-        var profile = new StudentProfileModel
-        {
-            FullName = fullName,
-            AccountId = account.Id
-        };
-
-        await studentProfileRepo.AddAsync(profile);
-    }
+    public async Task AddTeacherProfileAsync(string email, string fullName) =>
+        await AddProfileAsync(teacherProfileRepo, email, fullName);
 
     public async Task AddGroupAsync(string groupName, string description = "", Uri? imageUrl = null) =>
         await groupRepo.AddAsync(new GroupModel
@@ -35,4 +31,21 @@ public class AdminCabinetService(IStudentProfileRepo studentProfileRepo, IAccoun
             Description = description,
             ImageUrl = imageUrl
         });
+
+    private async Task AddProfileAsync<
+        TProfileModel>(IProfileRepo<TProfileModel> profileRepo,
+        string email,
+        string fullName) where TProfileModel : ProfileModel, new()
+    {
+        var account = await accountRepo.GetByEmailAsync(email);
+        if (account == null) return;
+
+        var profile = new TProfileModel
+        {
+            FullName = fullName,
+            AccountId = account.Id
+        };
+
+        await profileRepo.AddAsync(profile);
+    }
 }

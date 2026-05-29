@@ -23,7 +23,7 @@ public class StudentCabinetController(
         if (accountEmail is null || accountId is null)
             return RedirectToAction("Error", "Home");
 
-        var student = await cabinetService.GetStudentAsync(accountId.Value);
+        var student = await cabinetService.GetStudentProfileAsync(accountId.Value);
         if (student is null) return RedirectToAction("Error", "Home");
 
         var isEmailConfirmed = await confirmationTokenService.HasConfirmedTokensAsync(student.AccountId);

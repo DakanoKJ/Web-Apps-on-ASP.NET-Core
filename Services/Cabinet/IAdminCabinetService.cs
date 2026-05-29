@@ -8,5 +8,6 @@ public interface IAdminCabinetService
     Task<List<StudentProfileModel>> GetAllStudentProfilesAsync();
     Task<List<GroupModel>> GetAllGroupsAsync();
     Task AddStudentProfileAsync(string email, string fullName);
+    Task AddTeacherProfileAsync(string email, string fullName);
     Task AddGroupAsync(string groupName, string description = "", Uri? imageUrl = null);
 }

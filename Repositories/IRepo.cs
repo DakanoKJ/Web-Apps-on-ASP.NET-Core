@@ -1,11 +1,8 @@
-﻿using System.Linq.Expressions;
-using PersonalAccount.Data.Entities;
-using PersonalAccount.Models;
+﻿using PersonalAccount.Models;
 
 namespace PersonalAccount.Repositories;
 
-public interface IRepo<TEntity, TModel>
-    where TEntity : Entity, new()
+public interface IRepo<TModel>
     where TModel : Model, new()
 {
     // CREATE

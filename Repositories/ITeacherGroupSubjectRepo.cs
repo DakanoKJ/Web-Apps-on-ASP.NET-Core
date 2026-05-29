@@ -4,7 +4,7 @@ using PersonalAccount.Models;
 
 namespace PersonalAccount.Repositories;
 
-public interface ITeacherGroupSubjectRepo : IRepo<TeacherGroupSubjectEntity, TeacherGroupSubjectModel>
+public interface ITeacherGroupSubjectRepo : IRepo<TeacherGroupSubjectModel>
 {
     Task<List<TeacherGroupSubjectModel>> GetAllByTeacherAccountIdAsync(int teacherAccountId);
 }

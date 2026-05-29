@@ -3,4 +3,4 @@ using PersonalAccount.Models;
 
 namespace PersonalAccount.Repositories;
 
-public interface IGroupRepo : IRepo<GroupEntity, GroupModel>;
+public interface IGroupRepo : IRepo<GroupModel>;

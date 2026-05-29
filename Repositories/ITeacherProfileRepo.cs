@@ -1,6 +1,5 @@
-﻿using PersonalAccount.Data.Entities;
-using PersonalAccount.Models;
+﻿using PersonalAccount.Models;
 
 namespace PersonalAccount.Repositories;
 
-public interface ITeacherProfileRepo : IProfileRepo<TeacherProfileEntity, TeacherProfileModel>;
+public interface ITeacherProfileRepo : IProfileRepo<TeacherProfileModel>;
