@@ -23,4 +23,22 @@ public class StudentRepo<T>(AppDbContext context,  IMapper<StudentEntity, T> map
         var entity = await Students.FindAsync(id);
         return mapper.ToModel(entity);
     }
+
+    public async Task UpdateByIdAsync(int id, StudentModel student)
+    {
+        var entity = await Students.FindAsync(id);
+        if (entity is null) return;
+        entity.FullName = student.FullName;
+        entity.GroupName = student.GroupName;
+        entity.PhotoUrl = student.PhotoUrl?.ToString();
+        await context.SaveChangesAsync();
+    }
+
+    public async Task UpdatePasswordHashAsync(int id, string passwordHash)
+    {
+        var entity = await Students.FindAsync(id);
+        if (entity is null) return;
+        entity.PasswordHash = passwordHash;
+        await context.SaveChangesAsync();
+    }
 }
