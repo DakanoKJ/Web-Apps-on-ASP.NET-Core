@@ -34,6 +34,7 @@ namespace PersonalAccount
 
             builder.Services.AddScoped<IStudentAuthService, StudentAuthService>();
             builder.Services.AddScoped<IStudentCabinetService, StudentCabinetService>();
+            builder.Services.AddScoped<IPasswordService, PasswordService>();
             builder.Services.AddScoped<IConfirmationTokenService, ConfirmationTokenTokenService>();
             
             builder.Services.AddScoped<IStudentRepo<StudentAuthModel>, StudentRepo<StudentAuthModel>>();
