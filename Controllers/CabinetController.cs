@@ -66,17 +66,34 @@ public class CabinetController(
         var accounts = await adminCabinet.GetAllStudentAccountsAsync();
         var profiles = await adminCabinet.GetAllStudentProfilesAsync();
 
-        var studentInfos = profiles.Select(profile => new StudentInfoViewModel
+        var confirmationStatuses = await Task.WhenAll(
+            profiles.Select(p => confirmations.HasConfirmedTokensAsync(p.AccountId))
+        );
+
+        var studentInfos = profiles.Select((profile, i) => new StudentInfoViewModel
         {
+            AccountId = profile.AccountId,
             Email = accounts[profile.AccountId].Email,
             FullName = profile.FullName,
             GroupName = profile.GroupName,
             PhotoUrl = profile.PhotoUrl?.ToString(),
+            IsEmailConfirmed = confirmationStatuses[i],
         }).ToList();
 
         return View(new AdminCabinetViewModel
         {
             StudentInfos = studentInfos
         });
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "Administrator")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ConfirmStudentEmail(int id)
+    {
+        await adminCabinet.ConfirmStudentEmailAsync(id);
+        var adminId = User.GetId();
+        var role = User.GetRole();
+        return RedirectToAction("Admin", new { accountId = adminId, role });
     }
 }

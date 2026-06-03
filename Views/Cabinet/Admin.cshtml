@@ -1,33 +1,40 @@
-﻿@model AdminCabinetViewModel
+@model AdminCabinetViewModel
 
 @{
     ViewData["Title"] = "Панель администратора";
 }
 
 <div class="container">
-    <div class="d-flex justify-content-between align-content-center">
-        <h1 class="mb-4">Панель администратора</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Панель администратора</h1>
+        <form method="post" asp-controller="Account" asp-action="Logout">
+            <button class="btn btn-secondary" type="submit">Выйти</button>
+        </form>
     </div>
 
-    <div class="container d-flex flex-wrap gap-4">
-        @foreach (var studentInfo in Model.StudentInfos)
+    <div class="d-flex flex-wrap gap-4">
+        @foreach (var student in Model.StudentInfos)
         {
             <div class="card" style="width: 400px">
-                <div class="gap-2 d-grid align-items-stretch" style="grid-template-columns: repeat(2, 1fr)">
-                    <div class="w-100 h-100"
-                         style="background-image: url(@studentInfo.PhotoUrl); background-size: cover">
+                <div class="d-grid align-items-stretch" style="grid-template-columns: repeat(2, 1fr)">
+                    <div class="w-100" style="min-height: 160px; background-image: url(@student.PhotoUrl); background-size: cover; background-position: center"></div>
+                    <div class="d-flex flex-column gap-2 p-3">
+                        <p class="fw-bold mb-0">@student.FullName</p>
+                        <p class="mb-0">Группа: @student.GroupName</p>
+                        <p class="mb-0 text-muted small">@student.Email</p>
 
-                    </div>
-                    <div class="d-flex flex-column gap-2 w-100 h-100">
-                        <p class="card-header">
-                            @studentInfo.FullName
-                        </p>
-                        <p class="mb-1">
-                            Группа: @studentInfo.GroupName
-                        </p>
-                        <p>
-                            @studentInfo.Email
-                        </p>
+                        @if (student.IsEmailConfirmed)
+                        {
+                            <span class="badge bg-success">Почта подтверждена</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">Почта не подтверждена</span>
+                            <form method="post" asp-controller="Cabinet" asp-action="ConfirmStudentEmail">
+                                <input type="hidden" name="id" value="@student.AccountId" />
+                                <button type="submit" class="btn btn-sm btn-outline-success w-100">Подтвердить почту</button>
+                            </form>
+                        }
                     </div>
                 </div>
             </div>
