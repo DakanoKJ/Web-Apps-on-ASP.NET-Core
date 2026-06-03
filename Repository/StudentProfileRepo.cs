@@ -16,8 +16,8 @@ public class StudentProfileRepo(
     {
         var entity = await StudentProfiles
             .AsNoTracking()
-            .FirstOrDefaultAsync(entity => entity.AccountId == accountId) ?? throw new KeyNotFoundException();
-        return mapper.ToModel(entity);
+            .FirstOrDefaultAsync(entity => entity.AccountId == accountId);
+        return entity is null ? null : mapper.ToModel(entity);
     }
 
     public async Task<List<StudentProfileModel>> GetAllAsync()
